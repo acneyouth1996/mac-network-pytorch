@@ -9,8 +9,13 @@ from torch import optim
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from dataset import CLEVR, collate_data, transform
+from dataset import CLEVR, collate_data, transform, NLVR
 from model import MACNetwork
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--root', required = True)
+args = parser.parse_args()
 
 batch_size = 64
 n_epoch = 20
@@ -28,9 +33,9 @@ def accumulate(model1, model2, decay=0.999):
 
 
 def train(epoch):
-    clevr = CLEVR(sys.argv[1], transform=transform)
+    nlvr = NLVR(args.root, transform=transform)
     train_set = DataLoader(
-        clevr, batch_size=batch_size, num_workers=4, collate_fn=collate_data
+        nlvr, batch_size=batch_size, num_workers=4, collate_fn=collate_data
     )
 
     dataset = iter(train_set)
@@ -38,7 +43,7 @@ def train(epoch):
     moving_loss = 0
 
     net.train(True)
-    for image, question, q_len, answer, _ in pbar:
+    for image, question, q_len, answer in pbar:
         image, question, answer = (
             image.to(device),
             question.to(device),

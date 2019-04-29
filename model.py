@@ -161,7 +161,7 @@ class MACNetwork(nn.Module):
                 classes=28, dropout=0.15):
         super().__init__()
 
-        self.conv = nn.Sequential(nn.Conv2d(1024, dim, 3, padding=1),
+        self.conv = nn.Sequential(nn.Conv2d(100, dim, 3, padding=1),
                                 nn.ELU(),
                                 nn.Conv2d(dim, dim, 3, padding=1),
                                 nn.ELU())

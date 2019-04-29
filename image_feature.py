@@ -1,5 +1,6 @@
 import h5py
 import torch
+import json
 from torchvision.models.resnet import ResNet, resnet101
 from torchvision import transforms
 from torch.utils.data import Dataset, DataLoader
@@ -29,6 +30,33 @@ transform = transforms.Compose([
     transforms.ToTensor(),
     transforms.Normalize(mean=[0.485, 0.456, 0.406],
                         std=[0.229, 0.224, 0.225])])
+
+def readjson(json_path):
+    with open(json_path) as file:
+        data = json.loads(file)
+    return data
+
+class NLVR(Dataset):
+    def __init__(self):
+        pass
+
+    def __getitem__(self, index):
+        pass
+
+    def __len__(self):
+        pass 
+
+
+class FlaVR(Dataset):
+    def __init__(self):
+        pass
+
+    def __getitem__(self, index):
+        img_name = self.indexing
+        pass
+
+    def __len__(self):
+        pass 
 
 class CLEVR(Dataset):
     def __init__(self, root, split='train'):

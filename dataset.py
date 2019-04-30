@@ -12,14 +12,19 @@ from transforms import Scale
 from torch.utils.data import DataLoader
 
 
+transform = transforms.Compose([
+    
+    transforms.ToTensor(),
+    
+])
 
 
 class NLVR(Dataset):
-    def __init__(self, root, split='train', transform=None):
+    def __init__(self, root, split='train', transform= transform, perm=str(0)):
         with open(f'data/{split}.pkl', 'rb') as f:
             self.questions = pickle.load(f)
-
-        # self.transform = transform
+        self.perm = perm
+        self.transform = transform
         self.root = root
         self.split = split
         #self.h = h5py.File('nlvr/{}/{}_features.h5'.format(split,split), 'r')
@@ -38,14 +43,13 @@ class NLVR(Dataset):
     def __getitem__(self, index):
         identifier, question, answer = self.questions[index]
 
-        # img = self.transform(img)
-        perm = str(0)
+        #img = self.transform(img)
+        perm = self.perm
         img_name = self.split + '-'+ identifier + '-'+ perm + '.png'
         img_path =  self.indexing[img_name]
         
         img = Image.open(img_path).convert('RGB')
-        img = np.array(img)
-        img = torch.from_numpy(img)
+        img = self.transform(img)
 
         return img, question, len(question), answer
 
@@ -83,14 +87,7 @@ class CLEVR(Dataset):
     def __len__(self):
         return len(self.data)
 
-transform = transforms.Compose([
-    Scale([224, 224]),
-    transforms.Pad(4),
-    transforms.RandomCrop([224, 224]),
-    transforms.ToTensor(),
-    transforms.Normalize(mean=[0.5, 0.5, 0.5],
-                        std=[0.5, 0.5, 0.5])
-])
+
 
 def collate_data(batch):
     images, lengths, answers  = [], [], []
@@ -137,5 +134,5 @@ if __name__ =='__main__':
     for i, (img, question, lenquestion, answer) in enumerate(train_set):
         if i>=10:
             break
-        print(type(img) ,lenquestion)
+        print(img.type() ,lenquestion)
 

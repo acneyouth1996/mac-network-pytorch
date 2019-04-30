@@ -15,5 +15,5 @@ def create_indexing(split):
 
 if __name__ =='__main__':
     create_indexing('train')
-    create_indexing('val')
+    create_indexing('dev')
     

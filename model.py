@@ -158,10 +158,10 @@ class MACUnit(nn.Module):
 class MACNetwork(nn.Module):
     def __init__(self, n_vocab, dim, embed_hidden=300,
                 max_step=12, self_attention=False, memory_gate=False,
-                classes=28, dropout=0.15):
+                classes=2, dropout=0.15):
         super().__init__()
 
-        self.conv = nn.Sequential(nn.Conv2d(100, dim, 3, padding=1),
+        self.conv = nn.Sequential(nn.Conv2d(3, dim, 3, padding=1),
                                 nn.ELU(),
                                 nn.Conv2d(dim, dim, 3, padding=1),
                                 nn.ELU())
